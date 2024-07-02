@@ -31,7 +31,7 @@ class _QR_GeneratorState extends State<QR_Generator> {
     return Scaffold(
       appBar:AppBar(
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 69, 119, 177),
+        backgroundColor: Color.fromARGB(255, 66, 6, 122),
         title: const Text(
           "QR Code Generator ",
           style: TextStyle(color: Colors.white),

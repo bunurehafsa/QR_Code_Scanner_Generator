@@ -13,7 +13,7 @@ class _HistoryState extends State<History> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 69, 119, 177),
+        backgroundColor: Color.fromARGB(255, 66, 6, 122),
         title: const Text(
           "History",
           style: TextStyle(color: Colors.white),

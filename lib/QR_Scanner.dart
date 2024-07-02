@@ -20,7 +20,7 @@ class _QR_ScannerState extends State<QR_Scanner> {
     return Scaffold(
       appBar:AppBar(
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 69, 119, 177),
+        backgroundColor: Color.fromARGB(255, 66, 6, 122),
         title: const Text(
           "QR Code Scanner ",
           style: TextStyle(color: Colors.white),
@@ -50,7 +50,7 @@ class _QR_ScannerState extends State<QR_Scanner> {
               child: Center(
                 child: (result != null)
                     ? Text('Barcode Type: ${result!.format}   Data: ${result!.code}')
-                    : const Text('Scan a code',style: TextStyle(color: Colors.purple)),
+                    : const Text('Place the code inside the frame',style: TextStyle(color: Color.fromARGB(255, 20, 20, 20))),
               ),
             ),
           ],
