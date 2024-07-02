@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:qr_code_scanner_generator/home.dart';
 import 'package:qr_code_scanner_generator/login.dart';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -13,13 +11,14 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
-  final _mobileController = TextEditingController();
-  final _photoController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
 
   Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
@@ -27,12 +26,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         Uri.parse('https://task-management-backend-vhcq.onrender.com/api/v1/registration'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
+          'username': _usernameController.text,
           'email': _emailController.text,
           'password': _passwordController.text,
-          'firstName': _firstNameController.text,
-          'lastName': _lastNameController.text,
-          'mobile': _mobileController.text,
-          'photo': _photoController.text,
         }),
       );
 
@@ -59,151 +55,168 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('Registration')),
-        backgroundColor: Color.fromARGB(255, 133, 165, 202),
+        title:  Text('Sign Up',style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 66, 6, 122),
       ),
       body: Stack(
         children: [
-          
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/1.jpg'), 
-                fit: BoxFit.cover,
+                image: AssetImage('bg3.png'),
+                fit: BoxFit.fill,
               ),
             ),
           ),
-          
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Center(
-              child: SingleChildScrollView(
+          Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
                 child: Form(
                   key: _formKey,
-                  child: Container(
-                    height: 600,
-                    width: 500,
-                    
-                    padding: EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 173, 191, 211).withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(13.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 10.0,
-                          offset: Offset(0, 2),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          color: Color.fromARGB(239, 241, 242, 243),
+                          fontSize: 25,
                         ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Registration Form',style: TextStyle(color:const Color.fromARGB(255, 1, 36, 65),fontSize: 25),),
-                        SizedBox(height: 20,),
-                        TextFormField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            labelText: 'Email',
-                            hintText: 'Enter your email ',
-                            filled: true,
-                            fillColor: Colors.white38,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(6.0),
-                            ),
+                      ),
+                      SizedBox(height: 20),
+                      TextFormField(
+                        controller: _usernameController,
+                        decoration: InputDecoration(
+                          labelText: 'Username',
+                          hintText: 'Enter your username',
+                          filled: true,
+                          fillColor: Colors.white54,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Enter email';
-                            } else if (!value.contains('@')) {
-                              return 'Enter a valid email';
-                            }
-                            return null;
-                          },
                         ),
-                        SizedBox(height: 10),
-                        TextFormField(
-                          controller: _passwordController,
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            hintText: 'Enter your password ',
-                            filled: true,
-                            fillColor: Colors.white38,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(6.0),
-                            ),
+                        validator: (value) => value!.isEmpty ? 'Enter username' : null,
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          hintText: 'Enter your email',
+                          filled: true,
+                          fillColor: Colors.white54,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
                           ),
-                          obscureText: true,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Enter password';
-                            } else if (value.length < 6) {
-                              return 'Password must be at least 6 characters';
-                            }
-                            return null;
-                          },
                         ),
-                        SizedBox(height: 10),
-                        TextFormField(
-                          controller: _firstNameController,
-                          decoration: InputDecoration(
-                            labelText: 'First Name',
-                            hintText: 'Enter your first name ',
-                            filled: true,
-                            fillColor: Colors.white38,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(6.0),
-                            ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Enter email';
+                          } else if (!value.contains('@')) {
+                            return 'Enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          hintText: 'Enter your password',
+                          filled: true,
+                          fillColor: Colors.white54,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
                           ),
-                          validator: (value) => value!.isEmpty ? 'Enter first name' : null,
-                        ),
-                        SizedBox(height: 10),
-                        TextFormField(
-                          controller: _lastNameController,
-                          decoration: InputDecoration(
-                            labelText: 'Last Name',
-                            hintText: 'Enter your last name ',
-                            filled: true,
-                            fillColor: Colors.white38,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(6.0),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
                             ),
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
                           ),
-                          validator: (value) => value!.isEmpty ? 'Enter last name' : null,
                         ),
-                        SizedBox(height: 10),
-                        TextFormField(
-                          controller: _mobileController,
-                          decoration: InputDecoration(
-                            labelText: 'Mobile',
-                            filled: true,
-                            fillColor: Colors.white38,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(6.0),
+                        obscureText: !_isPasswordVisible,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Enter password';
+                          } else if (value.length < 6) {
+                            return 'Password must be at least 6 characters';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: _confirmPasswordController,
+                        decoration: InputDecoration(
+                          labelText: 'Confirm Password',
+                          hintText: 'Confirm your password',
+                          filled: true,
+                          fillColor: Colors.white54,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isConfirmPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
                             ),
+                            onPressed: () {
+                              setState(() {
+                                _isConfirmPasswordVisible =
+                                    !_isConfirmPasswordVisible;
+                              });
+                            },
                           ),
-                          validator: (value) => value!.isEmpty ? 'Enter mobile number' : null,
                         ),
-                        SizedBox(height: 10),
-                        TextFormField(
-                          controller: _photoController,
-                          decoration: InputDecoration(
-                            labelText: 'Photo URL',
-                            filled: true,
-                            fillColor: Colors.white38,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(6.0),
-                            ),
-                          ),
-                          validator: (value) => value!.isEmpty ? 'Enter photo URL' : null,
+                        obscureText: !_isConfirmPasswordVisible,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Confirm password';
+                          } else if (value != _passwordController.text) {
+                            return 'Passwords do not match';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: _register,
+                        child: Text(
+                          'Sign Up',
+                          style: TextStyle( fontSize: 15),
                         ),
-                        SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: _register,
-                          child: Text('Submit',style: TextStyle(color: Colors.purple,fontSize: 15)),
-                        ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 10), 
+               Text(
+                'Already have an account?',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 10), 
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginScreen(),
+            ),
+          );
+                },
+                child: Text('Login'),
+              ),
+                    ],
                   ),
                 ),
               ),
