@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
-//import 'dart:typed_data';
 import 'dart:ui';
 import 'dart:io';
 import 'package:flutter/rendering.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share_extend/share_extend.dart';
-
+import 'package:share_plus/share_plus.dart';
 
 class QR_Generator extends StatefulWidget {
   const QR_Generator({super.key});
@@ -26,10 +25,11 @@ class _QR_GeneratorState extends State<QR_Generator> {
   String _dataString = "Hello from this QR";
   String? _inputErrorText;
   final TextEditingController _textController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:AppBar(
+      appBar: AppBar(
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 66, 6, 122),
         title: const Text(
@@ -39,6 +39,7 @@ class _QR_GeneratorState extends State<QR_Generator> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.share),
+            color: Colors.white,
             onPressed: _captureAndSharePng,
           )
         ],
@@ -46,11 +47,12 @@ class _QR_GeneratorState extends State<QR_Generator> {
       body: _contentWidget(),
     );
   }
-   Future<void> _captureAndSharePng() async {
+
+  Future<void> _captureAndSharePng() async {
     try {
       RenderRepaintBoundary boundary =
           globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      var image = await boundary.toImage(pixelRatio: 3.0); 
+      var image = await boundary.toImage(pixelRatio: 3.0);
       ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
 
@@ -58,7 +60,7 @@ class _QR_GeneratorState extends State<QR_Generator> {
       final file = await File('${tempDir.path}/image.png').create();
       await file.writeAsBytes(pngBytes);
 
-      ShareExtend.share(file.path, "image");
+      Share.shareXFiles([XFile(file.path)], text: 'Check out this QR code!');
     } catch (e) {
       print(e.toString());
     }
@@ -115,10 +117,6 @@ class _QR_GeneratorState extends State<QR_Generator> {
                 child: QrImageView(
                   data: _dataString,
                   size: 0.5 * bodyHeight,
-                  // embeddedImage: AssetImage('assets/logo.jpeg'), 
-                  // embeddedImageStyle: QrEmbeddedImageStyle(
-                  //   size: Size(80, 80),
-                  // ),
                   errorStateBuilder: (cxt, err) {
                     return Container(
                       child: Center(
